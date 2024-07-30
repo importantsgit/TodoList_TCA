@@ -6,7 +6,12 @@
 //
 
 import Foundation
+import Combine
 import ComposableArchitecture
+
+struct CountActions {
+    let showTodoView: PassthroughSubject<Void, Never>
+}
 
 @Reducer
 struct CountFeature: Reducer {
@@ -28,10 +33,17 @@ struct CountFeature: Reducer {
         enum UserAction {
             case incrementButtonTapped
             case decrementButtonTapped
+            case dismissButtonTapped
         }
         
         case system(SystemAction)
         case user(UserAction)
+    }
+    
+    let actions: CountActions
+    
+    init(actions: CountActions) {
+        self.actions = actions
     }
     
     // 불투명 반환 타입을 사용하여 Reducer 프로토콜을 준수하는 어떤 타입이든 반환할 수 있음을 의미
@@ -79,6 +91,11 @@ struct CountFeature: Reducer {
             
         case .incrementButtonTapped:
             state.count += 1
+            
+        case .dismissButtonTapped:
+            actions.showTodoView.send()
+            return .none
+            
         }
         return .none
     }

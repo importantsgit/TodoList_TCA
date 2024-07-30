@@ -11,7 +11,7 @@ import SwiftData
 @Model
 final class Task {
     @Attribute(.unique) var title: String
-    let isChecked: Bool = false
+    var isChecked: Bool = false
     
     init(title: String) {
         self.title = title

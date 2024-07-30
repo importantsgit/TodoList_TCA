@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 import ComposableArchitecture
 
 struct CountView: View {
@@ -39,6 +40,12 @@ struct CountView: View {
                 .background(Color.black.opacity(0.1))
                 .clipShape(.rect(cornerRadius: 10))
             }
+            
+            Button {
+                store.send(.user(.dismissButtonTapped))
+            } label: {
+                Text("dismissButtonTapped")
+            }
         }
     }
 }
@@ -46,7 +53,7 @@ struct CountView: View {
 #Preview {
     CountView(
         store: Store (initialState: CountFeature.State()) {
-            CountFeature()
+            CountFeature(actions: .init(showTodoView: PassthroughSubject<Void, Never>()))
                 ._printChanges() // 디버깅용 메서드
         }
     )
