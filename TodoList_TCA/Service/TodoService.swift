@@ -14,7 +14,6 @@ enum TaskError: Error {
 
 protocol TaskServiceInterface {
     func getTasks() async throws -> [Task]
-    func addTask(_ task: Task) async throws
     func updateTask(_ task: Task) async throws
     func deleteTask(_ task: Task) async throws
 }
@@ -23,7 +22,6 @@ protocol TaskServiceInterface {
 final class TaskService: TaskServiceInterface {
     
     private let container: ModelContainer
-    
     
     private var context: ModelContext {
         container.mainContext
@@ -38,34 +36,14 @@ final class TaskService: TaskServiceInterface {
         return try context.fetch(descriptor)
     }
     
-    func addTask(_ task: Task) async throws {
+    func updateTask(_ task: Task) async throws {
         context.insert(task)
         try context.save()
     }
     
-    func updateTask(_ task: Task) async throws {
-//        
-//        let tasks = try context.fetch(FetchDescriptor<Task>(predicate: #Predicate<Task> { $0.id == task.id }))
-//        guard let updatingTask = tasks.first
-//        else { throw TaskError.notMatch }
-//        
-//        updatingTask.title = task.title
-//        updatingTask.isChecked = task.isChecked
-//        
-//        try context.save()
-    }
-    
     func deleteTask(_ task: Task) async throws {
-//        guard let compareTask = try context.fetch(FetchDescriptor<Task>(predicate: #Predicate<Task> { $0.id == task.id })).first
-//        else { throw TaskError.notMatch }
-//        
-//        if compareTask == task {
-//            context.delete(compareTask)
-//            try context.save()
-//        }
-//        else {
-//            throw TaskError.notMatch
-//        }
+        context.delete(task)
+        try context.save()
     }
 }
 

@@ -12,14 +12,45 @@ import ComposableArchitecture
 struct TodoListView: View {
     
     let store: StoreOf<TodoListFeature>
+    @State private var newTaskTitle: String = ""
     
     var body: some View {
-        HStack {
-            Button {
-                store.send(.view(.dismissButtonTapped))
-            } label: {
-                Text("dismissButtonTapped")
+        VStack {
+            HStack {
+                TextField("New task", text: $newTaskTitle)
+                Button("Add") {
+                    let newTask = Task(title: newTaskTitle)
+                    store.send(.view(.insertButtonTapped(newTask)))
+                    newTaskTitle = ""
+                }
+                .disabled(newTaskTitle.isEmpty)
             }
+            .padding()
+
+            Button("Dismiss") {
+                store.send(.view(.dismissButtonTapped))
+            }
+            
+            List {
+                ForEach(store.tasks, id: \.title) { task in
+                    HStack {
+                        Text(task.title)
+                        Spacer()
+                        Button(action: {
+                            store.send(.view(.deleteButtonTapped(task)))
+                        }) {
+                            Image(systemName: "trash")
+                                .foregroundColor(.red)
+                        }
+                    }
+                }
+            }
+
+
+        }
+        .navigationTitle("Todo List")
+        .onAppear {
+            store.send(.view(.initView))
         }
     }
 }

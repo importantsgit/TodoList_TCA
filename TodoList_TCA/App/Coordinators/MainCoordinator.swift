@@ -35,7 +35,7 @@ final class MainCoordinator: Coordinator {
     private func makeCountAction() -> CountActions {
         let showTodoView = PassthroughSubject<Void, Never>()
         showTodoView.sink { [weak self] _ in
-            self?.push(.main(.todo))
+            self?.pop()
         }
         .store(in: &cancellable)
         
@@ -45,7 +45,7 @@ final class MainCoordinator: Coordinator {
     private func makeTodoAction() -> TodoActions {
         let showCountView = PassthroughSubject<Void, Never>()
         showCountView.sink { [weak self] _ in
-            self?.pop()
+            self?.push(.main(.counter))
         }
         .store(in: &cancellable)
         

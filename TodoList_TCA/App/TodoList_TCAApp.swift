@@ -30,7 +30,7 @@ struct TodoList_TCAApp: App {
         self.DIContainer = AppDIContainer()
         self.coordinator = AppCoordinator(
             dependencies: DIContainer,
-            initialScene: .main(.counter)
+            initialScene: .main(.todo)
         )
         
         self.coordinator.start()
